@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 
-def search_file(file_path: str, word: str) -> None:
+def search_file(file_path: str, word: str) -> int:
 	"""Print lines containing word, including their line numbers."""
 	try:
 		with Path(file_path).open("r", encoding="utf-8") as file:
@@ -17,10 +17,15 @@ def search_file(file_path: str, word: str) -> None:
 
 		if not found:
 			print(f'No matches found for "{word}".')
+			return 1
+
+		return 0
 	except FileNotFoundError:
 		print(f"File not found: {file_path}")
+		return 1
 	except OSError as error:
 		print(f"Could not read file: {error}")
+		return 1
 
 
 if __name__ == "__main__":
@@ -33,4 +38,4 @@ if __name__ == "__main__":
 		print("Error: the FILE_TO_TEST environment variable is required")
 		sys.exit(1)
 
-	search_file(file_path, sys.argv[1])
+	sys.exit(search_file(file_path, sys.argv[1]))

@@ -19,9 +19,11 @@ environment {
                 echo "Stage name is: ${env.STAGE_NAME}"
                 echo 'Building the project...'
                 sh "echo 'No build steps configured yet' >> app.txt"
+                echo "+++++++++++++++++++++++++++++++++++++++++++++++++"
                 echo "'Application Name: ${APP_NAME}'"
                 echo "'Application Version: ${APP_VERSION}'"
                 echo "'Docker Repository: ${DOCKER_REPO}'"
+                echo "+++++++++++++++++++++++++++++++++++++++++++++++++"
                 sh 'touch build-info.txt'
                 echo "Application Name: ${APP_NAME}" >> build-info.txt
                 echo "Build Number: ${env.BUILD_NUMBER}" >> build-info.txt
@@ -33,22 +35,33 @@ environment {
             steps {
                 echo "Stage name is: ${env.STAGE_NAME}"
                 echo 'Running tests...'
+                echo "+++++++++++++++++++++++++++++++++++++++++++++++++"
                 echo "Pipeline name is: ${env.JOB_NAME}"
                 echo "Build number is: ${env.BUILD_NUMBER}"
                 echo "Pipeline name is: ${env.JOB_NAME}_${env.BUILD_NUMBER}"
+                echo "+++++++++++++++++++++++++++++++++++++++++++++++++"
                 sh 'ls -la'
-                stage('Check if app.txt exists') {
-                    steps {
-                        script {
-                            if (fileExists(FILE_TO_TEST)) {
-                                echo "File ${FILE_TO_TEST} exists."
-                            } else {
-                                error "File ${FILE_TO_TEST} does not exist."
+                parallel {
+                    stage('Check file exists') {
+                        steps {
+                            script {
+                                if (fileExists(FILE_TO_TEST)) {
+                                    echo "File ${FILE_TO_TEST} exists."
+                                } else {
+                                    error "File ${FILE_TO_TEST} does not exist."
+                                }
                             }
                         }
                     }
+                    stage('Search application name') {
+                        steps {
+                            sh 'FILE_TO_TEST="$FILE_TO_TEST" python3 search.py "Application Name"'
+                        }
+                    }
+                }
             }
         }
+
         stage('Deploy') {
             steps {
                 echo "Stage name is: ${env.STAGE_NAME}"
@@ -61,13 +74,13 @@ environment {
 
     post {
         always {
-            echo 'Pipeline finished.' (0)
+            echo 'Pipeline finished.'
         }
         success {
-            echo 'Build succeeded.' (0)
+            echo 'Build succeeded.'
         }
         failure {
-            echo 'Build failed.' (1)
+            echo 'Build failed.'
         }
         cleanup {
             cleanWs()
