@@ -5,7 +5,7 @@ environment {
         APP_NAME = 'MyApp'
         APP_VERSION = '1.0.0'
         DOCKER_REPO = 'aviel770'
-        FILE_TO_TEST = ./build-info.txt
+        FILE_TO_TEST = './build-info.txt'
     }
     stages {
         stage('Checkout') {
