@@ -12,7 +12,7 @@ pipeline {
             steps {
                 echo "Stage name is: ${env.STAGE_NAME}"
                 echo 'Building the project...'
-                sh 'echo "No build steps configured yet"' >> app.txt'
+                sh "echo 'No build steps configured yet' >> app.txt"
             }
         }
 
