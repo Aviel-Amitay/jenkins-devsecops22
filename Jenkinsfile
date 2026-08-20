@@ -10,6 +10,7 @@ pipeline {
 
         stage('Build') {
             steps {
+                echo "Stage name is: ${env.STAGE_NAME}"
                 echo 'Building the project...'
                 sh 'ls -la'
             }
@@ -17,11 +18,10 @@ pipeline {
 
         stage('Test') {
             steps {
+                echo "Stage name is: ${env.STAGE_NAME}"
                 echo 'Running tests...'
                 sh 'echo "No tests configured yet"'
             }
-        }
-        
         }
     }
 
