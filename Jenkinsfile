@@ -12,7 +12,7 @@ pipeline {
             steps {
                 echo "Stage name is: ${env.STAGE_NAME}"
                 echo 'Building the project...'
-                sh 'ls -la'
+                sh 'echo "No build steps configured yet"' >> app.txt'
             }
         }
 
@@ -20,7 +20,15 @@ pipeline {
             steps {
                 echo "Stage name is: ${env.STAGE_NAME}"
                 echo 'Running tests...'
-                sh 'echo "No tests configured yet"'
+                sh 'ls -la'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo "Stage name is: ${env.STAGE_NAME}"
+                echo 'Deploying the application...'
+                sh 'mkdir -p deploy && mv app.txt deploy/'
+                sh 'ls -laR'
             }
         }
     }
