@@ -32,30 +32,36 @@ environment {
         }
 
         stage('Test') {
-            steps {
-                echo "Stage name is: ${env.STAGE_NAME}"
-                echo 'Running tests...'
-                echo "+++++++++++++++++++++++++++++++++++++++++++++++++"
-                echo "Pipeline name is: ${env.JOB_NAME}"
-                echo "Build number is: ${env.BUILD_NUMBER}"
-                echo "Pipeline name is: ${env.JOB_NAME}_${env.BUILD_NUMBER}"
-                echo "+++++++++++++++++++++++++++++++++++++++++++++++++"
-                sh 'ls -la'
-                parallel {
-                    stage('Check file exists') {
-                        steps {
-                            script {
-                                if (fileExists(FILE_TO_TEST)) {
-                                    echo "File ${FILE_TO_TEST} exists."
-                                } else {
-                                    error "File ${FILE_TO_TEST} does not exist."
+            stages {
+                stage('Test setup') {
+                    steps {
+                        echo "Stage name is: ${env.STAGE_NAME}"
+                        echo 'Running tests...'
+                        echo "+++++++++++++++++++++++++++++++++++++++++++++++++"
+                        echo "Pipeline name is: ${env.JOB_NAME}"
+                        echo "Build number is: ${env.BUILD_NUMBER}"
+                        echo "Pipeline name is: ${env.JOB_NAME}_${env.BUILD_NUMBER}"
+                        echo "+++++++++++++++++++++++++++++++++++++++++++++++++"
+                        sh 'ls -la'
+                    }
+                }
+                stage('Parallel checks') {
+                    parallel {
+                        stage('Check file exists') {
+                            steps {
+                                script {
+                                    if (fileExists(FILE_TO_TEST)) {
+                                        echo "File ${FILE_TO_TEST} exists."
+                                    } else {
+                                        error "File ${FILE_TO_TEST} does not exist."
+                                    }
                                 }
                             }
                         }
-                    }
-                    stage('Search application name') {
-                        steps {
-                            sh 'FILE_TO_TEST="$FILE_TO_TEST" python3 search.py "Application Name"'
+                        stage('Search application name') {
+                            steps {
+                                sh 'FILE_TO_TEST="$FILE_TO_TEST" python3 search.py "Application Name"'
+                            }
                         }
                     }
                 }
