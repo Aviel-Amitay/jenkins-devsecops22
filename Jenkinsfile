@@ -18,9 +18,9 @@ environment {
                 echo "Stage name is: ${env.STAGE_NAME}"
                 echo 'Building the project...'
                 sh "echo 'No build steps configured yet' >> app.txt"
-                echo "echo 'Application Name: ${APP_NAME}'"
-                echo "echo 'Application Version: ${APP_VERSION}'"
-                echo "echo 'Docker Repository: ${DOCKER_REPO}'"
+                echo "'Application Name: ${APP_NAME}'"
+                echo "'Application Version: ${APP_VERSION}'"
+                echo "'Docker Repository: ${DOCKER_REPO}'"
             }
         }
 
